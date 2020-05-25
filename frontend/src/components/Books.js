@@ -6,43 +6,77 @@ class Books extends Component {
 
     constructor(props) {
         super(props);
-        this.selectNextThree = this.selectNextThree.bind(this);
         this.state = {
             books: []
         };
     }
 
     componentDidMount() {
-        var allBooks = []
+        fetch(`http://localhost:3001/categories/${this.props.listNameEncoded}/books`)
+            .then(response => response.json())
+            .then(localBooks => {
+                if (localBooks.length === 0) {
+                    this.getRemoteBooks();
+                } else {
+                    this.setState({books: localBooks});
+                }
+            })
+            .catch(() => this.getRemoteBooks());
+    }
+
+    getRemoteBooks() {
         fetch(`https://api.nytimes.com/svc/books/v3/lists/current/${this.props.listNameEncoded}.json?api-key=${this.apiKey}`)
             .then(response => response.json())
-            .then(data => data.results.books.forEach(element => allBooks.push(element)))
-            .then(_ => {this.setState({books: allBooks})});     
+            .then(data => {
+                const remoteBooks = [];
+                data.results.books.forEach(book => {
+                    remoteBooks.push({cover_pic: book.book_image, title: book.title, description: book.description,
+                                        author: book.author, publisher: book.publisher, isbn: book.isbns[0].isbn13})
+                });
+                this.postBooksToLocal({book: remoteBooks})
+                    .catch(error => alert(error));
+                this.setState({books: remoteBooks});
+            })
+            .catch(error => alert(error));   
     }
 
-    selectNextThree(index, nextBooks) {
-        var cards = new Array(3);
-        const j = index;
-        for (; index < j + 3 && index < this.state.books.length; index++) {
-            const book = nextBooks[index % 3];
-            cards[index % 3] = <BookCard coverPic={book.book_image} title={book.title} description={book.description}
-                                author={book.author} publisher={book.publisher} isbn={book.isbns.isbn10} />
-        }
-        return <div className="row"> {cards[0]} {cards[1]} {cards[2]} </div>;
+    async postBooksToLocal(books = {}) {
+        const response = await fetch(`http://localhost:3001/categories/${this.props.listNameEncoded}/books`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(books)
+        });
+        return response.json();
     }
+
+    removeBookFromCategory = function(isbn) {
+        const newBooks = this.state.books.filter(book => book.isbn !== isbn);
+        fetch(`http://localhost:3001/categories/${this.props.listNameEncoded}/books/${isbn}`, {method: 'DELETE'})
+            .then(() => this.setState({books: newBooks}))
+            .catch(error => alert(error));
+    }.bind(this);
+
+    splitEvery = (array, length) =>
+        array.reduce((result, item, index) => {
+                if (index % length === 0) result.push([])
+                result[Math.floor(index / length)].push(item)
+                return result
+            },
+            []
+        );
 
     render() {
-        var nextBooks = new Array(3);
-        return <div className="container"> 
-            {this.state.books.map((book, index) => {
-                    nextBooks[index % 3] = book;
-                    if (index === this.state.books.length - 1 || (index !== 0 && index % 3 === 0)) { 
-                        return this.selectNextThree(index, nextBooks);
-                    } else {
-                        return <> </>;
-                    }
-                })}
-        </div>;
+        return (
+            <div className="container"> 
+                {this.splitEvery(this.state.books, 3).map(booksChunk => (
+                    <div className="row">
+                        { booksChunk.map(book => <BookCard book={book} removeBookFromCategory={this.removeBookFromCategory} />) }
+                    </div>
+                ))}
+            </div>
+        );    
     }
 
 }

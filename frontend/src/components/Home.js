@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Navbar, Nav, NavItem, NavDropdown } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import Books from './Books';
 
 class Home extends Component {
@@ -15,11 +15,47 @@ class Home extends Component {
     }
 
     componentDidMount() {
+        fetch(`http://localhost:3001/categories`)
+            .then(response => response.json())
+            .then(categories => {
+                if (categories.length === 0) {
+                    this.getRemoteCategories();
+                } else {
+                    this.setState({bookCategories: categories, 
+                        currCategory: categories[0].list_name, 
+                        currCategoryEncoded: categories[0].list_name_encoded});
+                }
+            })
+            .catch(() => this.getRemoteCategories());
+    }
+
+    getRemoteCategories() {
         fetch(`https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=${this.apiKey}`)
             .then(response => response.json())
-            .then(data => this.setState({bookCategories: data.results, 
-                                         currCategory: data.results[0].list_name, 
-                                         currCategoryEncoded: data.results[0].list_name_encoded}));
+            .then(data => {
+                const categoryNames = [];
+                data.results.forEach(result => {
+                    categoryNames.push({list_name: result.list_name, list_name_encoded: result.list_name_encoded});
+                });
+                this.postCategoriesToLocal({category: categoryNames})
+                    .catch(error => alert(error));
+                this.setState({bookCategories: categoryNames, 
+                                currCategory: categoryNames[0].list_name, 
+                                currCategoryEncoded: categoryNames[0].list_name_encoded});
+            })
+            .catch(error => alert(error)); 
+    }
+
+    async postCategoriesToLocal(categories = {}) {
+        const response = await fetch(`http://localhost:3001/categories`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(categories)
+        });
+
+        return response.json();
     }
 
     render() {
@@ -35,11 +71,13 @@ class Home extends Component {
                     <div className="collapse navbar-collapse" id="navbarNavDropdown">
                         <Nav>
                             <NavDropdown title="Categories" id="basic-nav-dropdown">
-                                { this.state.bookCategories.map((element, index) => {
-                                    return <NavDropdown.Item key={element.list_name} onClick={() => this.setState({currCategory: element.list_name, 
-                                    currCategoryEncoded: element.list_name_encoded})} className="nav-item active">
-                                        {element.list_name} 
-                                    </NavDropdown.Item>;
+                                {this.state.bookCategories.map(element => {
+                                    return (
+                                        <NavDropdown.Item onClick={() => this.setState({currCategory: element.list_name, 
+                                        currCategoryEncoded: element.list_name_encoded})} className="nav-item active">
+                                            {element.list_name} 
+                                        </NavDropdown.Item>
+                                    );
                                 })}
                             </NavDropdown>
                         </Nav>

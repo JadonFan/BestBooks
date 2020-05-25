@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 
 class BookCard extends Component {
-    static defaultProps = {coverPic: "", title: "Jane Doe", description: "", author: "", publisher: "", isbn: "None"}
+    static defaultProps = {book: {coverPic: "", title: "Jane Doe", description: "", author: "", publisher: "", isbn: "None"}}
 
     constructor(props) {
         super(props);
         this.state = {
-            isShowingInfo: true
+            isShowingInfo: true,
+            bookEditData: {
+                cover_pic: this.props.book.cover_pic,
+                title: this.props.book.title,
+                description: this.props.book.description,
+                author: this.props.book.author,
+                publisher: this.props.book.publisher
+            }
         };
     }
 
@@ -14,23 +21,25 @@ class BookCard extends Component {
         return (
             <div className="col-md-4"  style={{margin:"30px 0px 30px 0px"}}>
                 <div className="card" style={{height: "100%"}}>
-                    <img className="card-img-top" src={this.props.coverPic} alt="Card cap"/>
+                    <img className="card-img-top" src={this.props.book.cover_pic} alt="Card cap"/>
                     <div className="card-body">
-                        <h5 className="card-title">{this.props.title}</h5>
-                        <p className="card-text">{this.props.description}</p>
+                        <h5 className="card-title">{this.props.book.title}</h5>
+                        <p className="card-text">{this.props.book.description}</p>
                     </div>
 
                     <ul className="list-group list-group-flush">
-                        <li className="list-group-item"> <b>Author:</b> &nbsp; {this.props.author} </li>
-                        <li className="list-group-item"> <b>Publisher:</b> &nbsp; {this.props.publisher} </li>
-                        <li className="list-group-item"> <b>ISBN:</b> &nbsp; {this.props.isbn} </li>
+                        <li className="list-group-item"> <b>Author:</b> &nbsp; {this.props.book.author} </li>
+                        <li className="list-group-item"> <b>Publisher:</b> &nbsp; {this.props.book.publisher} </li>
+                        <li className="list-group-item"> <b>ISBN:</b> &nbsp; {this.props.book.isbn} </li>
                     </ul>
 
                     <div className="card-body" style={{bottom: 0}}>
-                    <button type="button" className="btn btn-primary card-link" onClick={() => this.setState({isShowingInfo: false})}> 
+                    <button type="button" className="btn btn-primary card-link" 
+                    onClick={() => this.setState({isShowingInfo: false})}> 
                         Edit 
                     </button>
-                    <button type="button" className="btn btn-danger card-link"> 
+                    <button type="button" className="btn btn-danger card-link" 
+                    onClick={() => this.props.removeBookFromCategory(this.props.book.isbn)}> 
                         Delete 
                     </button>
                     </div>
@@ -82,9 +91,7 @@ class BookCard extends Component {
     }
 
     render() {
-        return (
-            <> {this.state.isShowingInfo ? this.displayInfo() : this.displayEdit() } </>
-        );
+        return  <> {this.state.isShowingInfo ? this.displayInfo() : this.displayEdit()} </>;
     }
 }
 
