@@ -1,6 +1,6 @@
 # NYTimes_Books
 
-**Front-end:** React, Redux
+**Front-end:** React, Redux\
 **Back-end:** Ruby on Rails, SQLite3
 
 *Note:* For now, the NYTimes API key is exposed in the repo
