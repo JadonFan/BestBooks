@@ -9,7 +9,7 @@ import './Nav.css';
  * @author Jadon
  */
 class Categories extends Component {
-  apiKey = "gKqNNLdx3R6yG0GiFbOOAScG4u6SKbJK";
+  apiKey = 'gKqNNLdx3R6yG0GiFbOOAScG4u6SKbJK';
 
   componentDidMount() {
     fetch(`http://localhost:3001/categories`)
