@@ -3,7 +3,8 @@ const bookReducer = (state = {books: []}, action) => {
     case 'SET_ALL': {
       const books = action.payload.books;
       return {...state, books};
-    } case 'EDIT': {
+    } 
+    case 'EDIT': {
       let targetIndex = 0;
       state.books.some((book, index) => {
         targetIndex = index;
@@ -11,10 +12,12 @@ const bookReducer = (state = {books: []}, action) => {
       });
       const books = [...state.books.slice(0, targetIndex), action.payload.updatedBook, ...state.books.slice(targetIndex + 1)];
       return {...state, books};
-    } case 'DELETE': {
+    } 
+    case 'DELETE': {
       const books = state.books.filter(book => book.isbn !== action.payload.targetIsbn);
       return {...state, books};
-    } default:
+    } 
+    default:
       return state;
   } 
 };

@@ -16,7 +16,7 @@ class BookCard extends Component {
     }
   };
   initialBookEdits = {
-    title: this.props.book.title,
+    title: this.props.book.title.toUpperCase(),
     description: this.props.book.description,
     author: this.props.book.author,
     publisher: this.props.book.publisher
@@ -48,7 +48,12 @@ class BookCard extends Component {
    */
   submitBookChanges(event) {
     event.preventDefault();
-    const editedBook = {...this.state.bookEdits, cover_pic: this.props.book.cover_pic, isbn: this.props.book.isbn};
+    const editedBook = {
+      ...this.state.bookEdits, 
+      cover_pic: this.props.book.cover_pic, 
+      title: this.props.title.toUpperCase(), 
+      isbn: this.props.book.isbn
+    };
     this.props.editBook(this.props.book.isbn, editedBook);
     this.setState({isInViewMode: true});
   }
@@ -73,7 +78,7 @@ class BookCard extends Component {
         <div className="card book-card" style={{height: "100%"}}>
           <img className="card-img-top" src={this.props.book.cover_pic} alt="Book Cover"/>
           <div className="card-body">
-            <h5 className="card-title"> {this.props.book.title} </h5>
+            <h5 className="card-title"> {this.props.book.title.toUpperCase()} </h5>
             <p className="card-text"> {this.props.book.description} </p>
           </div>
 
