@@ -6,7 +6,7 @@ class CategoriesController < ApplicationController
 
     def create
         @categories = []
-        params[:category].each do |param|
+        params[:categories].each do |param|
             posted_category = Category.new(category_permitted(param))
             @categories << posted_category if posted_category.save
         end

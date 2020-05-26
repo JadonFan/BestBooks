@@ -3,9 +3,19 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import Home from './components/Home'
+import Categories from './components/Categories';
+import { compose, createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import reducers from './reducers';
+import thunk from 'redux-thunk';
 
-ReactDOM.render(<Home />, document.getElementById('root'))
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
+
+ReactDOM.render(
+    <Provider store={store}> <Categories /> </Provider>, 
+    document.getElementById('root')
+);
 
 // ReactDOM.render(
 //   <React.StrictMode>

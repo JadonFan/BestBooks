@@ -9,7 +9,7 @@ class BooksController < ApplicationController
 
     def create 
         @books = []
-        params[:book].each do |param|
+        params[:books].each do |param|
             posted_book = @category.books.new(book_permitted(param))
             @books << posted_book if posted_book.save
         end
@@ -21,6 +21,7 @@ class BooksController < ApplicationController
     end
 
     def update
+        @book = Book.find_by(isbn: params[:isbn])
         if @book.update(book_params)
             render json: @book
         else 
@@ -45,7 +46,7 @@ class BooksController < ApplicationController
     end
 
     def book_params
-        params.require(:book).permit(:cover_pic, :title, :description, :author, :publisher, :isbn)
+        params.require(:book).permit(:title, :description, :author, :publisher)
     end
 
     def book_permitted(param)
