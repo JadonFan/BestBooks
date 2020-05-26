@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
-import { setCategories, changeCategory } from '../actions/CategoryActions'
-import Books from './Books';
+import { setCategories, changeCategory } from './CategoryActions'
+import Books from '../Books/Books';
 import './Nav.css';
 
 /**

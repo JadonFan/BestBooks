@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import BookCard from './BookCard';
-import { setBooks, editBook, deleteBook } from '../actions/BookActions'
+import { setBooks, editBook, deleteBook } from './BookActions'
 
 /**
  * @author Jadon
@@ -103,14 +103,12 @@ class Books extends Component {
           <div className="row">
             {
               booksChunk.map(book => {
-                console.log("AUTHOR: " + book.author)
                 return <BookCard book={book} removeBookFromCategory={this.removeBookFromCategory} 
                 editBook={this.editBook} />
               })
             }
           </div>
         ))}
-        {console.log("---------")}
       </div>
     );    
   }

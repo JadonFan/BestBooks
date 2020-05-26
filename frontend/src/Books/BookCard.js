@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './Books.css';
 
 /**
  * @author Jadon
@@ -68,8 +69,8 @@ class BookCard extends Component {
    */
   displayInfo() {
     return (
-      <div className="col-md-4" style={{margin:"30px 0px 30px 0px"}}>
-        <div className="card" style={{height: "100%"}}>
+      <div className="col-md-4 book-col">
+        <div className="card book-card" style={{height: "100%"}}>
           <img className="card-img-top" src={this.props.book.cover_pic} alt="Book Cover"/>
           <div className="card-body">
             <h5 className="card-title"> {this.props.book.title} </h5>
@@ -104,8 +105,8 @@ class BookCard extends Component {
    */
   displayEdit() {
     return (
-      <div className="col-md-4"  style={{margin:"30px 0px 30px 0px"}}>
-        <div className="card" style={{height: "100%"}}>
+      <div className="col-md-4 book-col">
+        <div className="card book-card">
           <div className="card-body">
             <form>
               <div className="form-group">
