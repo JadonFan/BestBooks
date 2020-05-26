@@ -51,7 +51,7 @@ class BookCard extends Component {
     const editedBook = {
       ...this.state.bookEdits, 
       cover_pic: this.props.book.cover_pic, 
-      title: this.props.title.toUpperCase(), 
+      title: this.props.book.title.toUpperCase(), 
       isbn: this.props.book.isbn
     };
     this.props.editBook(this.props.book.isbn, editedBook);
