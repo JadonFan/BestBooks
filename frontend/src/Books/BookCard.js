@@ -51,7 +51,6 @@ class BookCard extends Component {
     const editedBook = {
       ...this.state.bookEdits, 
       cover_pic: this.props.book.cover_pic, 
-      title: this.props.book.title.toUpperCase(), 
       isbn: this.props.book.isbn
     };
     this.props.editBook(this.props.book.isbn, editedBook);
@@ -116,7 +115,7 @@ class BookCard extends Component {
             <form>
               <div className="form-group">
                 <label htmlFor="bookTitle"> Title </label>
-                <input name="title" className="form-control" id="bookTitle" value={this.state.bookEdits.title} 
+                <input name="title" className="form-control" id="bookTitle" value={this.state.bookEdits.title.toUpperCase()} 
                 onChange={this.handleInputChange} /> 
               </div>
               <div className="form-group">
