@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  cover_pic: MyString
+  title: MyString
+  description: MyText
+  author: MyString
+  publisher: MyString
+  isbn: MyString
+  category: 
+
+two:
+  cover_pic: MyString
+  title: MyString
+  description: MyText
+  author: MyString
+  publisher: MyString
+  isbn: MyString
+  category: 
